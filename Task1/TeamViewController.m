@@ -22,16 +22,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
-
+    
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showCreatePlayerViewController)];
     self.navigationItem.rightBarButtonItem = addButton;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)showCreatePlayerViewController {
@@ -40,23 +38,27 @@
     [self presentViewController:createPlayerViewController animated:YES completion:nil];
 }
 
-/*
-- (void)insertNewObject:(id)sender {
-    NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
-    NSEntityDescription *entity = [[self.fetchedResultsController fetchRequest] entity];
-    NSManagedObject *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:[entity name] inManagedObjectContext:context];
-        
-    // If appropriate, configure the new managed object.
-    // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
-    [newManagedObject setValue:[NSDate date] forKey:@"timeStamp"];
-        
-    // Save the context.
-    NSError *error = nil;
-    if (![context save:&error]) {
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
-    }
+- (void)showStatisticsController {
+    NSLog(@"Statistics!!");
 }
+
+/*
+ - (void)insertNewObject:(id)sender {
+ NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
+ NSEntityDescription *entity = [[self.fetchedResultsController fetchRequest] entity];
+ NSManagedObject *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:[entity name] inManagedObjectContext:context];
+ 
+ // If appropriate, configure the new managed object.
+ // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
+ [newManagedObject setValue:[NSDate date] forKey:@"timeStamp"];
+ 
+ // Save the context.
+ NSError *error = nil;
+ if (![context save:&error]) {
+ NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+ abort();
+ }
+ }
  */
 
 #pragma mark - Segues
@@ -95,7 +97,7 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
         [context deleteObject:[self.fetchedResultsController objectAtIndexPath:indexPath]];
-            
+        
         NSError *error = nil;
         if (![context save:&error]) {
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
@@ -104,23 +106,28 @@
     }
 }
 // Title with button
-/*
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    //Headerview
     UIView *myView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 10.0)];
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 100, 35)];
+
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 100, 30)];
     title.text = [[[self.fetchedResultsController sections] objectAtIndex:section] valueForKey:@"name"];
-    [button setFrame:CGRectMake(100.0, 15.0, 18.0, 18.0)];
+    title.textColor = [UIColor darkGrayColor];
+
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setTitle:@"Statistics" forState:UIControlStateNormal];
+    [button setFrame:CGRectMake(235.0, 15.0, 80.0, 20.0)];
+    [button.titleLabel setFont:[UIFont systemFontOfSize:15]];
     button.tag = section;
     button.hidden = NO;
     [button setBackgroundColor:[UIColor clearColor]];
-    [button addTarget:self action:@selector(insertParameter:) forControlEvents:UIControlEventTouchDown];
-    [myView addSubview:title];
+    [button setTitleColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(showStatisticsController) forControlEvents:UIControlEventTouchUpInside];
     [myView addSubview:button];
+    [myView addSubview:title];
+
     return myView;
 }
- */
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
@@ -130,7 +137,7 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = [[object valueForKey:@"name"] description];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@%@", @"#", [[object valueForKey:@"number"] description]];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@%@ SCORE: %@", @"#", [[object valueForKey:@"number"] description], [[object valueForKey:@"goals"] description]];
 }
 
 #pragma mark - Fetched results controller
@@ -161,16 +168,16 @@
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
     
-	NSError *error = nil;
-	if (![self.fetchedResultsController performFetch:&error]) {
-	     // Replace this implementation with code to handle the error appropriately.
-	     // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-	    NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-	    abort();
-	}
+    NSError *error = nil;
+    if (![self.fetchedResultsController performFetch:&error]) {
+        // Replace this implementation with code to handle the error appropriately.
+        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        abort();
+    }
     
     return _fetchedResultsController;
-}    
+}
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
@@ -220,19 +227,24 @@
     }
 }
 
+- (CGFloat)tableView:(UITableView *)tableView
+heightForHeaderInSection:(NSInteger)section {
+    return 37;
+}
+
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
     [self.tableView endUpdates];
 }
 
 /*
-// Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed. 
+ // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.
  
  - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
-{
-    // In the simplest, most efficient, case, reload the table view.
-    [self.tableView reloadData];
-}
+ {
+ // In the simplest, most efficient, case, reload the table view.
+ [self.tableView reloadData];
+ }
  */
 
 @end
