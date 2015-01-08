@@ -7,15 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		308E97531A5B13EB00BC9C7B /* Team.m in Sources */ = {isa = PBXBuildFile; fileRef = 308E97521A5B13EB00BC9C7B /* Team.m */; };
+		308E97561A5B13EC00BC9C7B /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = 308E97551A5B13EC00BC9C7B /* Player.m */; };
 		30F68A251A58358B009CF572 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 30F68A241A58358B009CF572 /* main.m */; };
 		30F68A281A58358B009CF572 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 30F68A271A58358B009CF572 /* AppDelegate.m */; };
 		30F68A2B1A58358B009CF572 /* Task1.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 30F68A291A58358B009CF572 /* Task1.xcdatamodeld */; };
-		30F68A2E1A58358B009CF572 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30F68A2D1A58358B009CF572 /* MasterViewController.m */; };
-		30F68A311A58358B009CF572 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30F68A301A58358B009CF572 /* DetailViewController.m */; };
+		30F68A2E1A58358B009CF572 /* TeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30F68A2D1A58358B009CF572 /* TeamViewController.m */; };
+		30F68A311A58358B009CF572 /* PlayerDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30F68A301A58358B009CF572 /* PlayerDetailViewController.m */; };
 		30F68A341A58358B009CF572 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 30F68A321A58358B009CF572 /* Main.storyboard */; };
 		30F68A361A58358B009CF572 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 30F68A351A58358B009CF572 /* Images.xcassets */; };
 		30F68A391A58358B009CF572 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 30F68A371A58358B009CF572 /* LaunchScreen.xib */; };
 		30F68A451A58358B009CF572 /* Task1Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 30F68A441A58358B009CF572 /* Task1Tests.m */; };
+		30F68A691A58603F009CF572 /* CreatePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30F68A671A58603F009CF572 /* CreatePlayerViewController.m */; };
+		30F68A6A1A58603F009CF572 /* CreatePlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 30F68A681A58603F009CF572 /* CreatePlayerViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,22 +33,29 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		308E97511A5B13EB00BC9C7B /* Team.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Team.h; sourceTree = "<group>"; };
+		308E97521A5B13EB00BC9C7B /* Team.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Team.m; sourceTree = "<group>"; };
+		308E97541A5B13EC00BC9C7B /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		308E97551A5B13EC00BC9C7B /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
 		30F68A1F1A58358B009CF572 /* Task1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Task1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		30F68A231A58358B009CF572 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		30F68A241A58358B009CF572 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		30F68A261A58358B009CF572 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		30F68A271A58358B009CF572 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		30F68A2A1A58358B009CF572 /* Task1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Task1.xcdatamodel; sourceTree = "<group>"; };
-		30F68A2C1A58358B009CF572 /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
-		30F68A2D1A58358B009CF572 /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
-		30F68A2F1A58358B009CF572 /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
-		30F68A301A58358B009CF572 /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
+		30F68A2C1A58358B009CF572 /* TeamViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TeamViewController.h; sourceTree = "<group>"; };
+		30F68A2D1A58358B009CF572 /* TeamViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TeamViewController.m; sourceTree = "<group>"; };
+		30F68A2F1A58358B009CF572 /* PlayerDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerDetailViewController.h; sourceTree = "<group>"; };
+		30F68A301A58358B009CF572 /* PlayerDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerDetailViewController.m; sourceTree = "<group>"; };
 		30F68A331A58358B009CF572 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		30F68A351A58358B009CF572 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		30F68A381A58358B009CF572 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		30F68A3E1A58358B009CF572 /* Task1Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Task1Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		30F68A431A58358B009CF572 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		30F68A441A58358B009CF572 /* Task1Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Task1Tests.m; sourceTree = "<group>"; };
+		30F68A661A58603F009CF572 /* CreatePlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreatePlayerViewController.h; sourceTree = "<group>"; };
+		30F68A671A58603F009CF572 /* CreatePlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreatePlayerViewController.m; sourceTree = "<group>"; };
+		30F68A681A58603F009CF572 /* CreatePlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreatePlayerViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,16 +97,12 @@
 		30F68A211A58358B009CF572 /* Task1 */ = {
 			isa = PBXGroup;
 			children = (
-				30F68A261A58358B009CF572 /* AppDelegate.h */,
-				30F68A271A58358B009CF572 /* AppDelegate.m */,
-				30F68A2C1A58358B009CF572 /* MasterViewController.h */,
-				30F68A2D1A58358B009CF572 /* MasterViewController.m */,
-				30F68A2F1A58358B009CF572 /* DetailViewController.h */,
-				30F68A301A58358B009CF572 /* DetailViewController.m */,
+				30F68A4E1A583591009CF572 /* Application */,
+				30F68A4F1A583599009CF572 /* Controllers */,
+				30F68A501A5835E7009CF572 /* Models */,
 				30F68A321A58358B009CF572 /* Main.storyboard */,
-				30F68A351A58358B009CF572 /* Images.xcassets */,
 				30F68A371A58358B009CF572 /* LaunchScreen.xib */,
-				30F68A291A58358B009CF572 /* Task1.xcdatamodeld */,
+				30F68A511A5836CA009CF572 /* Resources */,
 				30F68A221A58358B009CF572 /* Supporting Files */,
 			);
 			path = Task1;
@@ -125,6 +132,81 @@
 				30F68A431A58358B009CF572 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		30F68A4E1A583591009CF572 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				30F68A261A58358B009CF572 /* AppDelegate.h */,
+				30F68A271A58358B009CF572 /* AppDelegate.m */,
+			);
+			name = Application;
+			sourceTree = "<group>";
+		};
+		30F68A4F1A583599009CF572 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				30F68A551A5848C1009CF572 /* Team */,
+				30F68A541A5848A7009CF572 /* Player */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		30F68A501A5835E7009CF572 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				30F68A291A58358B009CF572 /* Task1.xcdatamodeld */,
+				308E97541A5B13EC00BC9C7B /* Player.h */,
+				308E97551A5B13EC00BC9C7B /* Player.m */,
+				308E97511A5B13EB00BC9C7B /* Team.h */,
+				308E97521A5B13EB00BC9C7B /* Team.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		30F68A511A5836CA009CF572 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				30F68A351A58358B009CF572 /* Images.xcassets */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		30F68A541A5848A7009CF572 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				30F68A651A584CE6009CF572 /* PlayerDetail */,
+				30F68A641A584CDA009CF572 /* CreatePlayer */,
+			);
+			name = Player;
+			sourceTree = "<group>";
+		};
+		30F68A551A5848C1009CF572 /* Team */ = {
+			isa = PBXGroup;
+			children = (
+				30F68A2C1A58358B009CF572 /* TeamViewController.h */,
+				30F68A2D1A58358B009CF572 /* TeamViewController.m */,
+			);
+			name = Team;
+			sourceTree = "<group>";
+		};
+		30F68A641A584CDA009CF572 /* CreatePlayer */ = {
+			isa = PBXGroup;
+			children = (
+				30F68A661A58603F009CF572 /* CreatePlayerViewController.h */,
+				30F68A671A58603F009CF572 /* CreatePlayerViewController.m */,
+				30F68A681A58603F009CF572 /* CreatePlayerViewController.xib */,
+			);
+			name = CreatePlayer;
+			sourceTree = "<group>";
+		};
+		30F68A651A584CE6009CF572 /* PlayerDetail */ = {
+			isa = PBXGroup;
+			children = (
+				30F68A2F1A58358B009CF572 /* PlayerDetailViewController.h */,
+				30F68A301A58358B009CF572 /* PlayerDetailViewController.m */,
+			);
+			name = PlayerDetail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,6 +292,7 @@
 				30F68A341A58358B009CF572 /* Main.storyboard in Resources */,
 				30F68A391A58358B009CF572 /* LaunchScreen.xib in Resources */,
 				30F68A361A58358B009CF572 /* Images.xcassets in Resources */,
+				30F68A6A1A58603F009CF572 /* CreatePlayerViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,11 +310,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				30F68A311A58358B009CF572 /* DetailViewController.m in Sources */,
-				30F68A2E1A58358B009CF572 /* MasterViewController.m in Sources */,
+				308E97561A5B13EC00BC9C7B /* Player.m in Sources */,
+				30F68A311A58358B009CF572 /* PlayerDetailViewController.m in Sources */,
+				30F68A2E1A58358B009CF572 /* TeamViewController.m in Sources */,
 				30F68A281A58358B009CF572 /* AppDelegate.m in Sources */,
 				30F68A2B1A58358B009CF572 /* Task1.xcdatamodeld in Sources */,
 				30F68A251A58358B009CF572 /* main.m in Sources */,
+				308E97531A5B13EB00BC9C7B /* Team.m in Sources */,
+				30F68A691A58603F009CF572 /* CreatePlayerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,6 +508,7 @@
 				30F68A4A1A58358B009CF572 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		30F68A4B1A58358B009CF572 /* Build configuration list for PBXNativeTarget "Task1Tests" */ = {
 			isa = XCConfigurationList;
@@ -430,6 +517,7 @@
 				30F68A4D1A58358B009CF572 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

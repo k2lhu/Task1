@@ -6,14 +6,15 @@
 //  Copyright (c) 2015 Rechich Roman. All rights reserved.
 //
 
-#import "MasterViewController.h"
-#import "DetailViewController.h"
+#import "TeamViewController.h"
+#import "PlayerDetailViewController.h"
+#import "CreatePlayerViewController.h"
 
-@interface MasterViewController ()
+@interface TeamViewController ()
 
 @end
 
-@implementation MasterViewController
+@implementation TeamViewController
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -24,7 +25,7 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
 
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
+    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showCreatePlayerViewController)];
     self.navigationItem.rightBarButtonItem = addButton;
 }
 
@@ -33,6 +34,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)showCreatePlayerViewController {
+    CreatePlayerViewController *createPlayerViewController = [[CreatePlayerViewController alloc] init];
+    [createPlayerViewController setManagedObjectContext:[self managedObjectContext]];
+    [self presentViewController:createPlayerViewController animated:YES completion:nil];
+}
+
+/*
 - (void)insertNewObject:(id)sender {
     NSManagedObjectContext *context = [self.fetchedResultsController managedObjectContext];
     NSEntityDescription *entity = [[self.fetchedResultsController fetchRequest] entity];
@@ -45,12 +53,11 @@
     // Save the context.
     NSError *error = nil;
     if (![context save:&error]) {
-        // Replace this implementation with code to handle the error appropriately.
-        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
 }
+ */
 
 #pragma mark - Segues
 
@@ -59,6 +66,7 @@
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
         [[segue destinationViewController] setDetailItem:object];
+        [[segue destinationViewController] setManagedObjectContext:[self managedObjectContext]];
     }
 }
 
@@ -74,13 +82,12 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PlayerName" forIndexPath:indexPath];
     [self configureCell:cell atIndexPath:indexPath];
     return cell;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
     return YES;
 }
 
@@ -91,17 +98,39 @@
             
         NSError *error = nil;
         if (![context save:&error]) {
-            // Replace this implementation with code to handle the error appropriately.
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         }
     }
 }
+// Title with button
+/*
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    //Headerview
+    UIView *myView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 10.0)];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 100, 35)];
+    title.text = [[[self.fetchedResultsController sections] objectAtIndex:section] valueForKey:@"name"];
+    [button setFrame:CGRectMake(100.0, 15.0, 18.0, 18.0)];
+    button.tag = section;
+    button.hidden = NO;
+    [button setBackgroundColor:[UIColor clearColor]];
+    [button addTarget:self action:@selector(insertParameter:) forControlEvents:UIControlEventTouchDown];
+    [myView addSubview:title];
+    [myView addSubview:button];
+    return myView;
+}
+ */
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [[[self.fetchedResultsController sections] objectAtIndex:section] valueForKey:@"name"];
+}
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = [[object valueForKey:@"timeStamp"] description];
+    cell.textLabel.text = [[object valueForKey:@"name"] description];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@%@", @"#", [[object valueForKey:@"number"] description]];
 }
 
 #pragma mark - Fetched results controller
@@ -114,21 +143,21 @@
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:self.managedObjectContext];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Player" inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
     
     // Set the batch size to a suitable number.
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"timeStamp" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
     
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:nil cacheName:@"Master"];
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:@"team.name" cacheName:@"Master"];
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
     
