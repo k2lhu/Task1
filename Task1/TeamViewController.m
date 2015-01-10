@@ -9,6 +9,7 @@
 #import "TeamViewController.h"
 #import "PlayerDetailViewController.h"
 #import "CreatePlayerViewController.h"
+#import "StatisticsViewController.h"
 
 @interface TeamViewController ()
 
@@ -38,8 +39,13 @@
     [self presentViewController:createPlayerViewController animated:YES completion:nil];
 }
 
-- (void)showStatisticsController {
-    NSLog(@"Statistics!!");
+- (void)showStatisticsController:(id)sender {
+    UIButton *button = (UIButton *)sender;
+    NSString *teamName = button.restorationIdentifier;
+    StatisticsViewController *statisticsViewController = [[StatisticsViewController alloc] init];
+    [statisticsViewController setTeamName:teamName];
+    [statisticsViewController setContext:[self managedObjectContext]];
+    [self presentViewController:statisticsViewController animated:YES completion:nil];
 }
 
 /*
@@ -120,9 +126,10 @@
     [button.titleLabel setFont:[UIFont systemFontOfSize:15]];
     button.tag = section;
     button.hidden = NO;
+    button.restorationIdentifier = title.text;
     [button setBackgroundColor:[UIColor clearColor]];
     [button setTitleColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(showStatisticsController) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(showStatisticsController:) forControlEvents:UIControlEventTouchUpInside];
     [myView addSubview:button];
     [myView addSubview:title];
 
