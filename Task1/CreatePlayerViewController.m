@@ -70,7 +70,7 @@
     if ([objects count] == 0) {
         Team *team = [NSEntityDescription insertNewObjectForEntityForName:@"Team"
                                                    inManagedObjectContext:context];
-        team.name = self.playerTeamField.text;
+        team.name = [self.playerTeamField.text capitalizedString];
         player.team = team;
     } else {
         player.team = [objects objectAtIndex:0];

@@ -12,12 +12,13 @@
 
 @interface StatisticsViewController : UIViewController <CPTBarPlotDataSource>
 
+@property (weak, nonatomic) IBOutlet CPTGraphHostingView *hostView;
+
 @property NSString *teamName;
+@property (nonatomic, retain) NSMutableArray *names;
+@property (nonatomic, retain) NSMutableArray *goals;
 @property (nonatomic, retain) NSManagedObjectContext *context;
-
 @property (nonatomic, retain) CPTXYGraph *barChart;
-
-
-- (void) generateBarPlot;
+@property (strong, nonatomic) CPTBarPlot *teamBarPlot;
 
 @end

@@ -16,86 +16,114 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Create barChart from theme
-    CPTXYGraph *newGraph = [[CPTXYGraph alloc] initWithFrame:CGRectZero];
-    CPTTheme *theme      = [CPTTheme themeNamed:kCPTDarkGradientTheme];
-    [newGraph applyTheme:theme];
-    CPTGraphHostingView *hostingView = (CPTGraphHostingView *)self.view;
-    self.barChart = newGraph;
+    [self getAxis];
+    [self setTitle];
+    [self setNavigationBar];
+
+    [self initPlot];
+}
+
+
+- (void)initPlot{
+    self.hostView.allowPinchScaling = NO;
+    [self configureGraph];
+    [self configurePlot];
+    [self configureAxes];
+}
+
+- (void)configureGraph{
+    //Create Graph
+    CPTGraph *graph = [[CPTXYGraph alloc] initWithFrame:self.hostView.bounds];
+    graph.plotAreaFrame.masksToBorder = NO;
+    self.hostView.hostedGraph = graph;
     
-    hostingView.hostedGraph              = newGraph;
-    newGraph.plotAreaFrame.masksToBorder = NO;
+    //Configure the graph
+    [graph applyTheme:[CPTTheme themeNamed:kCPTPlainWhiteTheme]];
+    graph.paddingTop = 0.0f;
+    graph.paddingRight = 0.0f;
+    graph.paddingBottom = 0.0f;
+    graph.paddingLeft = 0.0f;
     
-    newGraph.paddingLeft   = 70.0;
-    newGraph.paddingTop    = 55.0;
-    newGraph.paddingRight  = 20.0;
-    newGraph.paddingBottom = 80.0;
+    graph.plotAreaFrame.paddingTop = 15.0f;
+    graph.plotAreaFrame.paddingRight = 10.0f;
+    graph.plotAreaFrame.paddingBottom = 60.0f;
+    graph.plotAreaFrame.paddingLeft = 45.0f;
     
-    // Add plot space for horizontal bar charts
-    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)newGraph.defaultPlotSpace;
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromDouble(0.0) length:CPTDecimalFromDouble(300.0)];
-    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromDouble(0.0) length:CPTDecimalFromDouble(16.0)];
+    CPTMutableTextStyle *titleStyle = [CPTMutableTextStyle textStyle];
+    titleStyle.color = [CPTColor blackColor];
+    titleStyle.fontName = @"Helvetica-Bold";
+    titleStyle.fontSize = 13.0f;
     
-    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)newGraph.axisSet;
-    CPTXYAxis *x          = axisSet.xAxis;
-    x.axisLineStyle               = nil;
-    x.majorTickLineStyle          = nil;
-    x.minorTickLineStyle          = nil;
-    x.majorIntervalLength         = CPTDecimalFromDouble(5.0);
-    x.orthogonalCoordinateDecimal = CPTDecimalFromDouble(0.0);
-    x.title                       = @"X Axis";
-    x.titleLocation               = CPTDecimalFromFloat(7.5f);
-    x.titleOffset                 = 55.0;
+    NSString *title = self.teamName;
     
-    // Define some custom labels for the data elements
-    x.labelRotation  = CPTFloat(M_PI_4);
-    x.labelingPolicy = CPTAxisLabelingPolicyNone;
-    NSArray *customTickLocations = @[@1, @5, @10, @15];
-    NSArray *xAxisLabels         = @[@"Пидар A", @"Пидор B", @"Label C", @"Label D"];
-    NSUInteger labelLocation     = 0;
-    NSMutableSet *customLabels   = [NSMutableSet setWithCapacity:[xAxisLabels count]];
-    for ( NSNumber *tickLocation in customTickLocations ) {
-        CPTAxisLabel *newLabel = [[CPTAxisLabel alloc] initWithText:xAxisLabels[labelLocation++] textStyle:x.labelTextStyle];
-        newLabel.tickLocation = [tickLocation decimalValue];
-        newLabel.offset       = x.labelOffset + x.majorTickLength;
-        newLabel.rotation     = CPTFloat(M_PI_4);
-        [customLabels addObject:newLabel];
+    graph.title = title;
+    graph.titleTextStyle = titleStyle;
+    graph.titlePlotAreaFrameAnchor = CPTRectAnchorTop;
+    
+    CGFloat xMin = 0.0f;
+    CGFloat yMin = 0.0f;
+    
+    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)graph.defaultPlotSpace;
+    
+    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromCGFloat(xMin) length:CPTDecimalFromCGFloat([self.names count])];
+    
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromCGFloat(yMin) length:CPTDecimalFromCGFloat([self maxGoals])];
+}
+
+- (void)configurePlot{
+    self.teamBarPlot = [CPTBarPlot tubularBarPlotWithColor:[CPTColor grayColor] horizontalBars:NO];
+    self.teamBarPlot.identifier = @"Team";
+    
+    CPTMutableLineStyle *lineStyle = [[CPTMutableLineStyle alloc] init];
+    lineStyle.lineColor = [CPTColor whiteColor];
+    lineStyle.lineWidth = 1.0f;
+    
+    
+    //Add plots to graph
+    CPTGraph *graph = self.hostView.hostedGraph;
+    self.teamBarPlot.delegate = self;
+    self.teamBarPlot.dataSource = self;
+    self.teamBarPlot.lineStyle = lineStyle;
+    self.teamBarPlot.fill = [CPTFill fillWithColor:[[CPTColor redColor] colorWithAlphaComponent:0.6f]];
+    self.teamBarPlot.barCornerRadius = 2.2f;
+    self.teamBarPlot.barWidth = CPTDecimalFromFloat(0.50f);
+    
+    [graph addPlot:self.teamBarPlot toPlotSpace:graph.defaultPlotSpace];
+}
+
+- (void)configureAxes{
+    CPTMutableTextStyle *axisTitleStyle = [[CPTMutableTextStyle alloc] init];
+    axisTitleStyle.color = [CPTColor blackColor];
+    axisTitleStyle.fontName = @"Helvetica-Bold";
+    axisTitleStyle.fontSize = 12.0f;
+    CPTMutableLineStyle *axisLineStyle = [[CPTMutableLineStyle alloc] init];
+    axisLineStyle.lineWidth = 2.0f;
+    axisLineStyle.lineColor = [[CPTColor blackColor] colorWithAlphaComponent:0.8f];
+    
+    CPTXYAxisSet *axisSet = (CPTXYAxisSet *) self.hostView.hostedGraph.axisSet;
+    
+    
+    NSMutableArray *labels = [[NSMutableArray alloc] init];
+    NSArray *playersName = self.names;
+    
+    for (int i = 0; i < [playersName count]; ++i) {
+        CPTAxisLabel *label = [[CPTAxisLabel alloc] initWithText:[playersName objectAtIndex:i] textStyle:axisTitleStyle];
+        label.rotation = M_PI_4;
+        label.tickLocation = CPTDecimalFromInt(i);
+        label.alignment = CPTAlignmentTop;
+        [labels addObject:label];
     }
     
-    x.axisLabels = customLabels;
+    axisSet.xAxis.labelingPolicy = CPTAxisLabelingPolicyNone;
+    axisSet.xAxis.axisLabels = [NSSet setWithArray:labels];
+    axisSet.xAxis.labelOffset = 0.0f;
+    axisSet.xAxis.titleTextStyle = axisTitleStyle;
+    axisSet.xAxis.axisLineStyle = axisLineStyle;
     
-    CPTXYAxis *y = axisSet.yAxis;
-    y.axisLineStyle               = nil;
-    y.majorTickLineStyle          = nil;
-    y.minorTickLineStyle          = nil;
-    y.majorIntervalLength         = CPTDecimalFromDouble(50.0);
-    y.orthogonalCoordinateDecimal = CPTDecimalFromDouble(0.0);
-    y.title                       = @"Y Axis";
-    y.titleOffset                 = 45.0;
-    y.titleLocation               = CPTDecimalFromFloat(150.0f);
     
-    // First bar plot
-    CPTBarPlot *barPlot = [CPTBarPlot tubularBarPlotWithColor:[CPTColor darkGrayColor] horizontalBars:NO];
-    barPlot.baseValue  = CPTDecimalFromDouble(0.0);
-    barPlot.dataSource = self;
-    barPlot.barOffset  = CPTDecimalFromFloat(-0.25f);
-    barPlot.identifier = @"Bar Plot 1";
-    [newGraph addPlot:barPlot toPlotSpace:plotSpace];
-    
-    // Second bar plot
-    barPlot                 = [CPTBarPlot tubularBarPlotWithColor:[CPTColor blueColor] horizontalBars:NO];
-    barPlot.dataSource      = self;
-    barPlot.baseValue       = CPTDecimalFromDouble(0.0);
-    barPlot.barOffset       = CPTDecimalFromFloat(0.25f);
-    barPlot.barCornerRadius = 2.0;
-    barPlot.identifier      = @"Bar Plot 2";
-    [newGraph addPlot:barPlot toPlotSpace:plotSpace];
-    
-#ifdef PERFORMANCE_TEST
-    [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(changePlotRange) userInfo:nil repeats:YES];
-#endif
-//    [self setTitle];
-//    [self setNavigationBar];
+    axisSet.yAxis.labelingPolicy = CPTAxisLabelingPolicyAutomatic;
+    axisSet.yAxis.titleTextStyle = axisTitleStyle;
+    axisSet.yAxis.axisLineStyle = axisLineStyle;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -104,7 +132,7 @@
 }
 
 - (void)setTitle {
-    NSString *title = [NSString stringWithFormat:@"%@ stats",self.teamName];
+    NSString *title = [NSString stringWithFormat:@"Statistics"];
     [self setTitle:title];
 }
 
@@ -123,41 +151,33 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)generateBarPlot {
-    
-}
-
-#pragma mark -
-#pragma mark Plot Data Source Methods
+#pragma mark - Plot Data Source Methods
 
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
 {
-    return 16;
+    return [self.names count];
 }
 
--(id)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
-{
-    NSNumber *num = nil;
+-(NSArray *)numbersForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndexRange:(NSRange)indexRange{
+    NSArray *nums = nil;
     
-    if ( [plot isKindOfClass:[CPTBarPlot class]] ) {
-        switch ( fieldEnum ) {
-            case CPTBarPlotFieldBarLocation:
-                num = @(index);
-                break;
-                
-            case CPTBarPlotFieldBarTip:
-                num = @( (index + 1) * (index + 1) );
-                if ( [plot.identifier isEqual:@"Bar Plot 2"] ) {
-                    num = @(num.integerValue - 10);
-                }
-                break;
-        }
+    switch ( fieldEnum ) {
+        case CPTBarPlotFieldBarLocation:
+            nums = [NSMutableArray arrayWithCapacity:indexRange.length];
+            for ( NSUInteger i = indexRange.location; i < NSMaxRange(indexRange); i++ ) {
+                [(NSMutableArray *)nums addObject : @(i)];
+            }
+            break;
+        case CPTBarPlotFieldBarTip:
+            nums = [self.goals objectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:indexRange]];
+            break;
+        default:
+            break;
     }
-    
-    return num;
+    return nums;
 }
 
-- (NSArray *)getYAxis {
+- (void)getAxis {
     NSEntityDescription *teamEntity = [NSEntityDescription entityForName:@"Player"
                                                   inManagedObjectContext:self.context];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
@@ -169,24 +189,24 @@
     NSError *error;
     NSArray *objects = [self.context executeFetchRequest:request error:&error];
     
-    NSMutableArray *xAxisLabels = [objects valueForKey:@"name"];
-    
-    for (NSString *string in xAxisLabels) {
-        NSLog(@"%@", string);
+    self.goals = [objects valueForKey:@"goals"];
+    for (NSString *str in self.goals) {
+        NSLog(@"%@", str);
     }
-    
-    return xAxisLabels;
+    self.names = [objects valueForKey:@"name"];
+    for (NSString *str in self.names) {
+        NSLog(@"%@", str);
+    }
 }
 
-
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
+- (NSUInteger)maxGoals {
+    NSNumber *max = 0;
+    for (NSNumber *value in self.goals) {
+        if (max < value) {
+            max = value;
+        }
+    }
+    return [max intValue];
+}
 
 @end

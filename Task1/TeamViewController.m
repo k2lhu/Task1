@@ -115,11 +115,11 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     UIView *myView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 10.0)];
-
+    
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 100, 30)];
     title.text = [[[self.fetchedResultsController sections] objectAtIndex:section] valueForKey:@"name"];
     title.textColor = [UIColor darkGrayColor];
-
+    
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"Statistics" forState:UIControlStateNormal];
     [button setFrame:CGRectMake(235.0, 15.0, 80.0, 20.0)];
@@ -132,7 +132,7 @@
     [button addTarget:self action:@selector(showStatisticsController:) forControlEvents:UIControlEventTouchUpInside];
     [myView addSubview:button];
     [myView addSubview:title];
-
+    
     return myView;
 }
 
@@ -160,25 +160,21 @@
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Player" inManagedObjectContext:self.managedObjectContext];
     [fetchRequest setEntity:entity];
     
-    // Set the batch size to a suitable number.
     [fetchRequest setFetchBatchSize:20];
     
-    // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
-    NSArray *sortDescriptors = @[sortDescriptor];
+    NSSortDescriptor *sortDescriptorTeamName = [[NSSortDescriptor alloc] initWithKey:@"team.name" ascending:YES];
+    NSSortDescriptor *sortDescriptorPlayerName = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+    NSArray *sortDescriptors = @[sortDescriptorTeamName, sortDescriptorPlayerName];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
     
-    // Edit the section name key path and cache name if appropriate.
-    // nil for section name key path means "no sections".
+
     NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:@"team.name" cacheName:@"Master"];
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
     
     NSError *error = nil;
     if (![self.fetchedResultsController performFetch:&error]) {
-        // Replace this implementation with code to handle the error appropriately.
-        // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
