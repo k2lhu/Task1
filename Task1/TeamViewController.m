@@ -95,15 +95,18 @@
 // Title with button
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    UIView *myView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 10.0)];
     
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 100, 30)];
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    UIView *myView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, screenWidth, 10.0)];
+    
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0.033 * screenWidth, 10, 0.33 * screenWidth, 30)];
     title.text = [[[self.fetchedResultsController sections] objectAtIndex:section] valueForKey:@"name"];
     title.textColor = [UIColor darkGrayColor];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"Statistics" forState:UIControlStateNormal];
-    [button setFrame:CGRectMake(235.0, 15.0, 80.0, 20.0)];
+    [button setFrame:CGRectMake(0.76 * screenWidth, 15.0, 80.0, 20.0)];
     [button.titleLabel setFont:[UIFont systemFontOfSize:15]];
     button.tag = section;
     button.hidden = NO;

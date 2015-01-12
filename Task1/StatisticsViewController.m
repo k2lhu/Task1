@@ -140,7 +140,10 @@
     UINavigationItem *navigationItem = [[UINavigationItem alloc] initWithTitle:self.title];
     [navigationItem setHidesBackButton:YES];
     
-    UINavigationBar *navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64.0f)];
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    
+    UINavigationBar *navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, screenWidth, 64.0f)];
     [navigationBar pushNavigationItem:navigationItem animated:NO];
     
     [self.view addSubview:navigationBar];
@@ -190,13 +193,7 @@
     NSArray *objects = [self.context executeFetchRequest:request error:&error];
     
     self.goals = [objects valueForKey:@"goals"];
-    for (NSString *str in self.goals) {
-        NSLog(@"%@", str);
-    }
     self.names = [objects valueForKey:@"name"];
-    for (NSString *str in self.names) {
-        NSLog(@"%@", str);
-    }
 }
 
 - (NSUInteger)maxGoals {
